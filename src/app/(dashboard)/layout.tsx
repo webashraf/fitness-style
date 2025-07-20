@@ -16,6 +16,7 @@ const { Header, Sider, Content } = Layout;
 const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [year, setYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     setMounted(true); // prevent SSR mismatch
@@ -27,8 +28,22 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (!mounted) return null; // avoid hydration error
 
+  const handleYearChange = (value: number) => {
+    setYear(value);
+    // You can add additional logic when year changes here
+  };
+
+  // Example years from 2020 to current year
+  const yearOptions = [];
+  for (let y = 2020; y <= new Date().getFullYear(); y++) {
+    yearOptions.push(y);
+  }
+
   return (
-    <Layout hasSider className="h-screen overflow-hidden">
+    <Layout
+      hasSider
+      className="h-screen overflow-hidden max-w-[1580px] mx-auto"
+    >
       <Sider
         trigger={null}
         collapsible
@@ -62,34 +77,30 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       <Layout className="h-screen">
         <Header
-          className="h-[300px] px-4 "
+          className="h-[100px] px-4 flex items-center"
           style={{ background: "#ffffff", height: "100px" }}
         >
-          <div className="flex items-center h-full gap-5 ">
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{ fontSize: "30px", width: 64, height: 64 }}
-            />
-            <div>
-              <h2 className="text-xl leading-none">Welcome, James</h2>
-              <p className="leading-none">Have a nice day!</p>
-            </div>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ fontSize: "30px", width: 64, height: 64 }}
+          />
+          <div>
+            <h2 className="text-xl leading-none">Welcome, James</h2>
+            <p className="leading-none">Have a nice day!</p>
           </div>
         </Header>
 
         <Content
           style={{
-            padding: 24,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
             height: "calc(100vh - 200px)", // adjusted for Header height
             overflowY: "auto",
-            
           }}
         >
-          {children}
+          <div className="bg-zinc-50 h-auto px-5">{children}</div>
         </Content>
       </Layout>
     </Layout>
