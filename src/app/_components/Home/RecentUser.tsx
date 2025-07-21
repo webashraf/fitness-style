@@ -128,19 +128,17 @@ const RecentUser: React.FC = () => {
     ),
   }));
 
-  // Custom header cell with Tailwind classes
+  // ✅ Custom header style with red background
   const components = {
     header: {
-      cell: (props: any) => {
-        return (
-          <th
-            {...props}
-            className="bg-emerald-500 text-white font-semibold text-center py-3"
-          >
-            {props.children}
-          </th>
-        );
-      },
+      cell: (props: any) => (
+        <th
+          {...props}
+          className="bg-red-600 text-white text-center font-semibold py-3"
+        >
+          {props.children}
+        </th>
+      ),
     },
   };
 

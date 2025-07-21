@@ -26,7 +26,9 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  if (!mounted) return null; // avoid hydration error
+  if (!mounted) {
+    return null;
+  } // avoid hydration error
 
   const handleYearChange = (value: number) => {
     setYear(value);

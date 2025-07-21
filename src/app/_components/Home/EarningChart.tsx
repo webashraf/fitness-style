@@ -63,8 +63,8 @@ const EarningChart = () => {
   const [selectedYear, setSelectedYear] = useState("2024");
 
   return (
-    <div className="bg-red-">
-      <div className="w-full h-[460px] bg-white rounded-2xl shadow-md p-6">
+    <div className="bg-white rounded-2xl shadow-md p-10">
+      <div className="w-full h-[460px]  p-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-gray-800">
@@ -85,14 +85,14 @@ const EarningChart = () => {
         {/* Chart */}
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            barCategoryGap={"20%"}
+            // barCategoryGap={"20%"}
             data={earningsDataByYear[selectedYear]}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis
               dataKey="name"
               tick={{ fontSize: 12 }}
-              stroke="#4b5563"
+              stroke="#001d46"
               label={{
                 value: "Month",
                 position: "insideBottom",
@@ -119,7 +119,13 @@ const EarningChart = () => {
               }}
               formatter={(value: number) => [`$${value}`, "Earnings"]}
             />
-            <Bar dataKey="earnings" fill="#002b14" radius={[6, 6, 0, 0]} />
+            <Bar
+              dataKey="earnings"
+              barSize={70}
+              fill="#022914"
+              radius={[6, 6, 0, 0]}
+              activeBar={false}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
