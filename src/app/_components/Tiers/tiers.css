@@ -1,0 +1,66 @@
+/* Common Reset */
+.tiers-btn,
+.tiers-btn-rt,
+.tiers-btn-lt {
+  padding: 10px 24px; /* Adjusted for good click area */
+  height: 40px; /* Consistent height */
+  min-width: 140px; /* Fixed width */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 16px; /* Readable size */
+  font-weight: 600; /* Bold for visibility */
+  line-height: 1.2;
+  transition: all 0.3s ease; /* Smooth hover */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+}
+.tiers-btn {
+  background: #0b3f28;
+  color: white;
+  font-weight: 600;
+  padding: 10px 24px;
+  height: 44px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.tiers-btn:hover {
+  background: #0e5033;
+}
+
+.tiers-btn-rt {
+  background: #0b3f28;
+  color: white;
+  font-weight: 600;
+  border: 2px solid #0b3f28;
+  transition: all 0.3s ease;
+}
+
+.tiers-btn-rt:hover {
+  background: white;
+  color: #0b3f28;
+}
+
+.tiers-btn-lt {
+  background: #002b141a;
+  border: 2px solid #0b3f28;
+  color: #0b3f28;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tiers-btn-lt:hover {
+  background: #0b3f28;
+  color: white;
+}
+
+.tiers-modal-btn {
+  color: white;
+}
+.tiers-modal-btn .add-btn {
+  margin-top: 10px !important;
+}
