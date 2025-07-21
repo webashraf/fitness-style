@@ -29,3 +29,41 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.custom-sidebar-menu .ant-menu-item {
+  background-color: #002b141a !important; /* light greenish-gray */
+  color: #1f2937 !important; /* gray-800 */
+  /* transition: all 0.3s ease; */
+  border-radius: 3px;
+  margin-bottom: 15px;
+
+  /* ✅ Increased vertical padding */
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* ✅ General hover effect */
+.custom-sidebar-menu .ant-menu-item:hover {
+  background-color: #002b14 !important;
+  color: white !important;
+}
+
+/* ✅ Selected (active) item style */
+.custom-sidebar-menu .ant-menu-item-selected {
+  background-color: #002b14 !important;
+  color: white !important;
+}
+
+/* ✅ Logout button special hover */
+.custom-sidebar-menu .ant-menu-item.logout-item:hover {
+  background-color: #dc2626 !important; /* Tailwind red-600 */
+  color: white !important;
+}
+
+.custom-sidebar-menu .ant-menu-item.logout-item:hover .anticon,
+.custom-sidebar-menu .ant-menu-item.logout-item:hover a,
+.custom-sidebar-menu .ant-menu-item.logout-item:hover span {
+  color: white !important;
+}

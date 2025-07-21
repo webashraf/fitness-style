@@ -1,22 +1,26 @@
 "use client";
 
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import Image from "next/image";
+import { Button, Layout, theme } from "antd";
 import React, { useEffect, useState } from "react";
+import { IoIosMenu, IoMdClose } from "react-icons/io";
+import { RiNotification3Line } from "react-icons/ri";
+import SiderMenu from "../_components/structure/SiderMenu";
+import HeaderMenuDropdown from "../_components/ui/HeaderMenuDropdown";
 
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasNewNotification, setHasNewNotification] = useState(false); // Fix: Use state to trigger re-render
+
+  const handleModalOpen = async () => {
+    setIsModalOpen(true);
+    // await readAllNotification(undefined);
+    // refetch();
+    setHasNewNotification(false); // ✅ Reset badge after opening modal
+  };
 
   useEffect(() => {
     setMounted(true); // prevent SSR mismatch
@@ -30,11 +34,6 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return null;
   } // avoid hydration error
 
-  const handleYearChange = (value: number) => {
-    setYear(value);
-    // You can add additional logic when year changes here
-  };
-
   // Example years from 2020 to current year
   const yearOptions = [];
   for (let y = 2020; y <= new Date().getFullYear(); y++) {
@@ -42,59 +41,56 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <Layout
-      hasSider
-      className="h-screen overflow-hidden max-w-[1580px] mx-auto"
-    >
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        style={{ background: "white" }}
-      >
-        {/* Fixed height for logo container */}
-        <div
-          className="flex justify-center items-center mt-5"
-          style={{ height: "120px" }}
-        >
-          <Image
-            src="/images/auth/logo.png"
-            alt="KBA Logo"
-            width={collapsed ? 40 : 100}
-            height={collapsed ? 40 : 100}
-            style={{ objectFit: "contain", transition: "all 0.3s ease-in-out" }}
-          />
-        </div>
-
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            { key: "1", icon: <UserOutlined />, label: "nav 1" },
-            { key: "2", icon: <VideoCameraOutlined />, label: "nav 2" },
-            { key: "3", icon: <UploadOutlined />, label: "nav 3" },
-          ]}
-        />
-      </Sider>
+    <Layout hasSider className="h-screen overflow-hidden mx-auto">
+      <SiderMenu collapsed={collapsed} />
 
       <Layout className="h-screen">
         <Header
-          className="h-[100px] px-4 flex items-center"
-          style={{ background: "#ffffff", height: "100px" }}
+          style={{
+            background: "white",
+            height: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{ fontSize: "30px", width: 64, height: 64 }}
-          />
-          <div>
-            <h2 className="text-xl leading-none">Welcome, James</h2>
-            <p className="leading-none">Have a nice day!</p>
+          <div className="flex justify-between items-center w-full gap-5 bg-amber-30">
+            <Button
+              type="text"
+              icon={
+                collapsed ? <IoMdClose size={36} /> : <IoIosMenu size={36} />
+              }
+              onClick={() => setCollapsed(!collapsed)}
+              className="flex max-h-[0px] items-center justify-center transition-all duration-300 bg-cyan-30"
+            />
+            <div className=" leading-6 w-full flex items-center justify-between gap-10 bg-indigo-40">
+              <div>
+                <h4 className="text-[24px]">Welcome, James</h4>
+                <p className="text-[16px] leading-0">Have a nice day!</p>
+              </div>
+
+              <div className="flex items-center gap-4 relative">
+                {/* Notification Button (Fixed Badge) */}
+                <div
+                  onClick={() => handleModalOpen()}
+                  className="bg-zinc-200  p-2 rounded-full relative hover:cursor-pointer"
+                >
+                  {hasNewNotification && (
+                    <span className="bg-brand-primary size-3 rounded-full absolute right-0 top-0"></span>
+                  )}
+                  <RiNotification3Line className="text-zinc-900" size={25} />
+
+                  <div className="size-3 bg-brand-primary rounded-full absolute top-0 right-0"></div>
+                </div>
+
+                {/* User Menu */}
+                <HeaderMenuDropdown />
+              </div>
+            </div>
           </div>
         </Header>
-
         <Content
+        
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
@@ -102,7 +98,7 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             overflowY: "auto",
           }}
         >
-          <div className="bg-zinc-50 h-auto px-5">{children}</div>
+          <div className="bg-zinc-50 h-auto px-5 ">{children}</div>
         </Content>
       </Layout>
     </Layout>
