@@ -28,10 +28,10 @@ const VideoContents = () => {
     <div className="p-6">
       <VideoFilter />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-        {Array.from({ length: 2 }).flatMap(() =>
-          mockData.map((item, idx) => (
+        {Array.from({ length: 2 }).flatMap((_, outerIdx) =>
+          mockData.map((item, innerIdx) => (
             <VideoCard
-              key={idx}
+              key={`${outerIdx}-${innerIdx}-${item.title}`} // ✅ always unique
               title={item.title}
               subtitle={item.subtitle}
               image={item.image}

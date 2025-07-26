@@ -57,7 +57,7 @@ const PersonalInfoPage = () => {
 
   return (
     <Form
-      className="w-[1026px] mt-5"
+      className="w-[1026px] !pt-5"
       layout="vertical"
       onFinish={handleSubmit(onSubmit)}
     >
@@ -70,7 +70,7 @@ const PersonalInfoPage = () => {
         </span>
         <Button
           icon={<FaRegEdit size={18} />}
-          className="bg-[#FF4F00] w-[206px] h-[56px]"
+          className="!bg-brand-primary w-[206px] h-[56px]"
           size="large"
           type="primary"
           onClick={toggleEditMode}

@@ -176,7 +176,7 @@ const ChangePasswordModal = ({ open, setOpen }: any) => {
 
             <Button
               type="primary"
-              className="w-full bg-[#FF4F00] h-[56px] mt-5 text-white font-semibold"
+              className="w-full !bg-brand-primary !py-5 !mt-5 text-white font-semibold"
               htmlType="submit"
             >
               Update password
