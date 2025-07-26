@@ -1,0 +1,21 @@
+.ql-toolbar {
+  margin-bottom: 12px !important;
+  display: flex;
+  justify-content: end;
+  border: none !important;
+}
+
+.ql-formats {
+  background-color: white;
+  border-radius: 3px;
+}
+
+.ql-container {
+  background-color: #f8fafc;
+  color: #5c5c5c;
+  height: 500px !important;
+  font-size: 16px;
+  border: none !important;
+  border-radius: 10px;
+  overflow: auto !important;
+}
