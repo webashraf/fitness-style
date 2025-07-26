@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Layout, theme } from "antd";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoIosMenu, IoMdClose } from "react-icons/io";
 import { RiNotification3Line } from "react-icons/ri";
@@ -78,7 +79,9 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   {hasNewNotification && (
                     <span className="bg-brand-primary size-3 rounded-full absolute right-0 top-0"></span>
                   )}
-                  <RiNotification3Line className="text-zinc-900" size={25} />
+                  <Link href="/notification">
+                    <RiNotification3Line className="text-zinc-900" size={25} />
+                  </Link>
 
                   <div className="size-3 bg-brand-primary rounded-full absolute top-0 right-0"></div>
                 </div>
@@ -90,7 +93,6 @@ const App: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
         </Header>
         <Content
-        
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,

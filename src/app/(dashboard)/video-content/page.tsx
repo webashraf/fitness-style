@@ -1,9 +1,9 @@
-import VideoContents from "@/app/_components/video-content/VideoContents";
+import WorkoutPage from "@/app/_components/video-content/WorkoutPage";
 
 const VideoPage = () => {
   return (
     <div>
-      <VideoContents />
+      <WorkoutPage />
     </div>
   );
 };

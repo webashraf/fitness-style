@@ -1,3 +1,5 @@
 {
-  "buildCommand": "corepack enable && yarn install && yarn build"
+  "buildCommand": "corepack enable && yarn install && yarn build",
+  "projectId": "prj_57ILPD0erRBDKpEJ1fEpzmgrnyiV",
+  "orgId": "team_yOK9gnqhAkWwqbl9Y39CjgyM"
 }
