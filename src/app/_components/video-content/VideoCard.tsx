@@ -1,7 +1,9 @@
 "use client";
 
+import { Button, Upload } from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
+import { FaUpload } from "react-icons/fa6";
 import DynamicModal from "../shared/DynamicModal";
 
 const WorkoutPage = () => {
@@ -34,6 +36,7 @@ const WorkoutPage = () => {
 
   const [newTitle, setNewTitle] = useState("");
   const [newSubtitle, setNewSubtitle] = useState("");
+  const [itemImage, setItemImage] = useState<string | null>(null);
 
   const handleDelete = (id: number) => {
     setWorkouts((prev) => prev.filter((item) => item.id !== id));
@@ -42,11 +45,26 @@ const WorkoutPage = () => {
   const handleEditClick = (
     id: number,
     currentTitle: string,
-    currentSubtitle: string
+    currentSubtitle: string,
+    currentImage: string
   ) => {
     setEditingWorkout({ id, title: currentTitle, subtitle: currentSubtitle });
     setNewTitle(currentTitle);
     setNewSubtitle(currentSubtitle);
+    setItemImage(currentImage);
+  };
+
+  const handleUploadImage = (info: any) => {
+    const file = info.file.originFileObj;
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setItemImage(reader.result as string);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
@@ -56,11 +74,18 @@ const WorkoutPage = () => {
     setWorkouts((prev) =>
       prev.map((item) =>
         item.id === editingWorkout.id
-          ? { ...item, title: newTitle, subtitle: newSubtitle }
+          ? {
+              ...item,
+              title: newTitle,
+              subtitle: newSubtitle,
+              image: itemImage || item.image,
+            }
           : item
       )
     );
+
     setEditingWorkout(null);
+    setItemImage(null);
   };
 
   return (
@@ -97,7 +122,12 @@ const WorkoutPage = () => {
             <button
               type="button"
               onClick={() =>
-                handleEditClick(workout.id, workout.title, workout.subtitle)
+                handleEditClick(
+                  workout.id,
+                  workout.title,
+                  workout.subtitle,
+                  workout.image
+                )
               }
               className="bg-brand-primary !text-white px-10 py-3 rounded hover:bg-green-800 transition"
             >
@@ -110,9 +140,32 @@ const WorkoutPage = () => {
       {/* Edit Modal */}
       <DynamicModal
         isOpen={!!editingWorkout}
-        onClose={() => setEditingWorkout(null)}
+        onClose={() => {
+          setEditingWorkout(null);
+          setItemImage(null);
+        }}
       >
         <form onSubmit={handleEditSubmit} className="space-y-4">
+          <div className=" w-full h-[200px] border rounded-lg flex flex-col items-center justify-center relative overflow-hidden">
+            <Image
+              src={itemImage || "/images/placeholder.png"}
+              alt="workout-image"
+              fill
+              className="object-cover"
+            />
+            <Upload
+              className="w-full h-full absolute "
+              onChange={handleUploadImage}
+              showUploadList={false}
+            >
+              <Button
+                className="!w-full !h-full !absolute top-0 !bg-zinc-900 opacity-40 hover:opacity-40 "
+                icon={<FaUpload  />}
+              >
+                Click to Upload
+              </Button>
+            </Upload>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Title
@@ -139,17 +192,21 @@ const WorkoutPage = () => {
           </div>
           <div className="flex justify-end gap-4 mt-4">
             <button
-              type="button"
-              onClick={() => setEditingWorkout(null)}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
-              className="px-4 py-2 bg-brand-primary text-white rounded hover:bg-green-800"
+              className="px-4 py-3 w-full bg-brand-primary !text-white rounded hover:bg-green-800"
             >
-              Save
+              Update
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setEditingWorkout(null);
+                setItemImage(null);
+              }}
+              className="px-4 py-3 w-full bg-gray-200 rounded hover:bg-gray-300"
+            >
+              Delete
             </button>
           </div>
         </form>
