@@ -1,4 +1,7 @@
-// app/pricing/page.tsx (Next.js 13+ with Tailwind CSS)
+"use client";
+
+import React, { useState } from "react";
+import DynamicModal from "../shared/DynamicModal";
 
 interface Plan {
   icon: string;
@@ -18,7 +21,7 @@ interface Plan {
   isStrikethrough?: boolean;
 }
 
-const plans: Plan[] = [
+const initialPlans: Plan[] = [
   {
     icon: "🍓",
     title: "Single Tier Plan",
@@ -58,13 +61,145 @@ const plans: Plan[] = [
 ];
 
 export default function Subscription() {
+  const [plans, setPlans] = useState<Plan[]>(initialPlans);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+
+  // Form inputs
+  const [singleTierPrice, setSingleTierPrice] = useState("");
+  const [allTiersPrice, setAllTiersPrice] = useState("");
+  const [annualPrice, setAnnualPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+
+  const openEditModal = (index: number) => {
+    const plan = plans[index];
+    setEditingIndex(index);
+    setIsAdding(false);
+    setSingleTierPrice(plan.price || "");
+    setAllTiersPrice(plan.originalPrice || "");
+    setAnnualPrice(plan.inputValue || "");
+    setDiscount("");
+    setIsModalOpen(true);
+  };
+
+  const openAddModal = () => {
+    setEditingIndex(null);
+    setIsAdding(true);
+    setSingleTierPrice("");
+    setAllTiersPrice("");
+    setAnnualPrice("");
+    setDiscount("");
+    setIsModalOpen(true);
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newPlan: Plan = {
+      icon: "🆕",
+      title: "Custom Plan",
+      tiersName: [],
+      frequency: "Custom",
+      price: singleTierPrice,
+      originalPrice: allTiersPrice || undefined,
+      inputValue: annualPrice,
+      inputNote: "New Plan Input Note",
+      yearlyPrice: annualPrice,
+      features: ["Custom feature 1", "Custom feature 2"],
+      buttonStyle: "border border-2 border-green-900 !rounded-full !mt-2",
+      bgColor: "bg-white",
+    };
+
+    if (isAdding) {
+      setPlans([...plans, newPlan]);
+    } else if (editingIndex !== null) {
+      const updatedPlans = [...plans];
+      updatedPlans[editingIndex] = {
+        ...updatedPlans[editingIndex],
+        price: singleTierPrice,
+        originalPrice: allTiersPrice,
+        inputValue: annualPrice,
+      };
+      setPlans(updatedPlans);
+    }
+
+    setIsModalOpen(false);
+    setEditingIndex(null);
+  };
+
   return (
     <div className="min-h-screen bg-[#E6ECE8] p-6 md:p-12">
       <div className="flex justify-end mb-6">
-        <button className="bg-green-900 !text-white px-4 py-2 rounded-md font-medium shadow">
+        <button
+          onClick={openAddModal}
+          className="bg-green-900 !text-white px-4 py-2 rounded-md font-medium shadow"
+        >
           + Add New Plan
         </button>
       </div>
+
+      <DynamicModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <form onSubmit={handleEditSubmit} className="space-y-4 p-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Single Tier Price (Monthly)
+            </label>
+            <input
+              type="text"
+              value={singleTierPrice}
+              onChange={(e) => setSingleTierPrice(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              All Tiers Price (Monthly)
+            </label>
+            <input
+              type="text"
+              value={allTiersPrice}
+              onChange={(e) => setAllTiersPrice(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Enable Annual Plan
+            </label>
+            <input
+              type="text"
+              value={annualPrice}
+              onChange={(e) => setAnnualPrice(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Discount (%)
+            </label>
+            <input
+              type="text"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
+          </div>
+
+          <div className="flex justify-end gap-4 mt-4">
+            <button
+              type="submit"
+              className="px-4 py-3 w-full bg-green-800 text-white rounded hover:bg-green-900"
+            >
+              {isAdding ? "Add Plan" : "Save Changes"}
+            </button>
+          </div>
+        </form>
+      </DynamicModal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
         {plans.map((plan, index) => (
@@ -80,7 +215,7 @@ export default function Subscription() {
             </div>
 
             {plan.tiersName.length > 0 && (
-              <select className="w-full p-2 border border-gray-300 rounded-md  bg-white !mb-3">
+              <select className="w-full p-2 border border-gray-300 rounded-md bg-white !mb-3">
                 {plan.tiersName.map((tier, idx) => (
                   <option key={idx} value={tier}>
                     {tier}
@@ -126,10 +261,13 @@ export default function Subscription() {
             </ul>
 
             <div className="flex justify-between gap-6">
-              <button className="bg-green-900 w-full py-3  !text-white px-4  rounded-md text-lg">
+              <button
+                onClick={() => openEditModal(index)}
+                className="bg-brand-primary w-full py-3 !text-white px-4 rounded-md text-lg"
+              >
                 Edit
               </button>
-              <button className="bg-red-200 border w-full py-3  !text-red-600 px-4  rounded-md text-lg">
+              <button className="bg-red-200 border w-full py-3 text-red-600 px-4 rounded-md text-lg">
                 Delete
               </button>
             </div>

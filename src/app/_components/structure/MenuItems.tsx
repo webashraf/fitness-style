@@ -3,6 +3,7 @@ import { BiLogOut } from "react-icons/bi";
 import { CiBadgeDollar } from "react-icons/ci";
 import { FaUserShield } from "react-icons/fa6";
 import { IoSettingsOutline, IoVideocamOutline } from "react-icons/io5";
+import { MdOutlineSubscriptions } from "react-icons/md";
 import { RiBarChart2Line } from "react-icons/ri";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 
@@ -25,7 +26,19 @@ export const sidebarMenuItems = [
   {
     key: "/subscription",
     icon: <CiBadgeDollar size={22} />,
-    label: <Link href="/subscription">Subscription</Link>,
+    label: "Subscription",
+    children: [
+      {
+        key: "/subscription/main",
+        icon: <MdOutlineSubscriptions size={22} />,
+        label: <Link href="/subscription">Plans</Link>,
+      },
+      {
+        key: "/subscription/users",
+        icon: <FaUserShield size={22} />,
+        label: <Link href="/subscription/users">Users</Link>,
+      },
+    ],
   },
   {
     key: "/video-content",
@@ -43,10 +56,10 @@ export const sidebarMenuItems = [
       <span className="text-red-600">
         <BiLogOut color="red" size={22} />
       </span>
-    ), // ✅ red icon
+    ),
     label: (
       <Link href="/login">
-        <span className="text-red-500">Logout</span> {/* ✅ red text */}
+        <span className="text-red-500">Logout</span>
       </Link>
     ),
   },

@@ -69,7 +69,9 @@ const WorkoutPage = () => {
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingWorkout) return;
+    if (!editingWorkout) {
+      return;
+    }
 
     setWorkouts((prev) =>
       prev.map((item) =>
@@ -160,7 +162,7 @@ const WorkoutPage = () => {
             >
               <Button
                 className="!w-full !h-full !absolute top-0 !bg-zinc-900 opacity-40 hover:opacity-40 "
-                icon={<FaUpload  />}
+                icon={<FaUpload />}
               >
                 Click to Upload
               </Button>

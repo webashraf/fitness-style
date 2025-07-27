@@ -50,6 +50,20 @@ body {
   color: white !important;
 }
 
+.ant-menu-submenu-title {
+  background: #002b141a !important;
+  padding: 10px !important;
+  margin-bottom: 10px !important;
+}
+.ant-menu-submenu-title:hover {
+  background: #002b14 !important;
+  color: white !important;
+}
+
+ul#rc-menu-uuid-20638-2-\/subscription-popup {
+  margin-left: 10px !important;
+}
+
 /* ✅ Selected (active) item style */
 .custom-sidebar-menu .ant-menu-item-selected {
   background-color: #002b14 !important;
