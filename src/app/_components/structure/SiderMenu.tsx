@@ -10,6 +10,34 @@ import { sidebarMenuItems } from "./MenuItems";
 const SiderMenu = ({ collapsed }: { collapsed: boolean }) => {
   const [selectedKey, setSelectedKey] = useState("");
 
+  // Tailwind class conditionally apply করবো এখানে
+  // collapsed হলে padding কমাবে pl-3, না হলে pl-6; এবং collapsed হলে text-red-600 দিবে
+  const getItemClassName = () =>
+    collapsed ? "pl-3 text-red-600" : "pl-6 text-gray-900";
+
+  // sidebarMenuItems কে map করে items তৈরির জন্য helper ফাংশন (children সহ)
+  // Remove className property to match Ant Design Menu item type
+  const mapItemsWithClass = (
+    items: typeof sidebarMenuItems
+  ): any[] =>
+    items.map((item) => {
+      if (item.children) {
+        // For parent items, keep label as string to match type expectations
+        return {
+          ...item,
+          // label remains as string
+          children: mapItemsWithClass(item.children),
+        };
+      }
+      // For leaf items, convert label to JSX.Element
+      const { children, ...rest } = item;
+      return {
+        ...rest,
+        label:
+          typeof item.label === "string" ? <span>{item.label}</span> : item.label,
+      };
+    });
+
   return (
     <Sider
       trigger={null}
@@ -38,11 +66,11 @@ const SiderMenu = ({ collapsed }: { collapsed: boolean }) => {
       {/* Menu */}
       <div className="px-5">
         <Menu
-          className="custom-sidebar-menu bg-transparent pt-10 px-5]"
+          className="custom-sidebar-menu bg-transparent pt-10 px-5"
           mode="inline"
           selectedKeys={[selectedKey]}
           onClick={({ key }) => setSelectedKey(key)}
-          items={sidebarMenuItems}
+          items={mapItemsWithClass(sidebarMenuItems)}
         />
       </div>
     </Sider>
