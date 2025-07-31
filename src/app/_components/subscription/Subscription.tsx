@@ -193,7 +193,7 @@ export default function Subscription() {
           <div className="flex justify-end gap-4 mt-4">
             <button
               type="submit"
-              className="px-4 py-3 w-full bg-green-800 text-white rounded hover:bg-green-900"
+              className="px-4 py-3 w-full bg-green-800 !text-white rounded hover:bg-green-900"
             >
               {isAdding ? "Add Plan" : "Save Changes"}
             </button>

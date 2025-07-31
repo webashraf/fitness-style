@@ -1,8 +1,7 @@
 "use client";
 
-import { EyeOutlined } from "@ant-design/icons";
 import type { TableColumnsType } from "antd";
-import { Avatar, Modal, Space, Table, Tooltip } from "antd";
+import { Avatar, Modal, Space, Table } from "antd";
 import { useState } from "react";
 
 import { BsHeartHalf } from "react-icons/bs";
@@ -15,10 +14,13 @@ type DataType = {
   serial: string;
   name: string;
   email: string;
+  tiers: string;
+  amount: string;
   phoneNumber: string;
   address: string;
   createdAt: string;
   avatar?: string;
+  status?: string;
 };
 
 const PremiumUsers = () => {
@@ -46,6 +48,9 @@ const PremiumUsers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<DataType | null>(null);
 
+  const [blockModalVisible, setBlockModalVisible] = useState(false);
+  const [blockUserData, setBlockUserData] = useState<DataType | null>(null);
+
   // ✅ Dummy Users
   const users = Array.from({ length: 20 }).map((_, i) => {
     const num = i + 1;
@@ -54,11 +59,14 @@ const PremiumUsers = () => {
       name: `User ${num}`,
       email: `user${num}@example.com`,
       phoneNumber: `017000000${num.toString().padStart(2, "0")}`,
+      tiers: i % 2 === 0 ? "Awaken" : "Balance",
+      amount: `$${(num * 10).toFixed(2)}`,
       address: `${num} Road, City ${num}`,
       createdAt: new Date(
         Date.now() - Math.floor(Math.random() * 10000000000)
       ).toISOString(),
       profileImage: "",
+      status: i % 2 === 0 ? "Active" : "Inactive",
     };
   });
 
@@ -72,15 +80,23 @@ const PremiumUsers = () => {
     setSelectedUser(null);
   };
 
+  const handleBlockUser = (user: DataType) => {
+    setBlockUserData(user);
+    setBlockModalVisible(true);
+  };
+
   const dataSource: DataType[] = users.map((user, index) => ({
     key: user._id,
     serial: `#${(index + 1).toString().padStart(2, "0")}`,
     name: user.name,
     email: user.email,
     phoneNumber: user.phoneNumber,
+    tiers: user.tiers,
+    amount: user.amount,
     address: user.address,
     createdAt: user.createdAt,
     avatar: user.profileImage || defaultAvatar,
+    status: user.status,
   }));
 
   const columns: TableColumnsType<DataType> = [
@@ -88,7 +104,7 @@ const PremiumUsers = () => {
       title: "Serial",
       dataIndex: "serial",
       render: (text) => <span className="pl-4">{text}</span>,
-      width: "10%",
+      width: "7%",
       align: "center",
     },
     {
@@ -100,13 +116,25 @@ const PremiumUsers = () => {
           {text}
         </Space>
       ),
-      width: "25%",
+      width: "20%",
       align: "start",
     },
     {
       title: "Email",
       dataIndex: "email",
-      width: "25%",
+      width: "20%",
+      align: "start",
+    },
+    {
+      title: "Tiers",
+      dataIndex: "tiers",
+      width: "10%",
+      align: "start",
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      width: "10%",
       align: "start",
     },
     {
@@ -117,20 +145,20 @@ const PremiumUsers = () => {
       render: (date: string) => new Date(date).toLocaleString(),
     },
     {
-      title: "Action",
-      dataIndex: "action",
-      width: "10%",
+      title: "Status",
+      dataIndex: "status",
+      width: "15%",
       align: "center",
-      render: (_, record) => (
-        <Tooltip title="View Details">
-          <button
-            onClick={() => handleViewUser(record)}
-            className="text-lg cursor-pointer bg-transparent border-none"
-            aria-label="View user details"
-          >
-            <EyeOutlined />
-          </button>
-        </Tooltip>
+      render: (status: string) => (
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+            status === "Active"
+              ? "text-green-600 bg-green-100"
+              : "text-red-600 bg-red-100"
+          }`}
+        >
+          {status}
+        </span>
       ),
     },
   ];
@@ -213,6 +241,30 @@ const PremiumUsers = () => {
                   <span>{item.value}</span>
                 </div>
               ))}
+            </div>
+          )}
+        </Modal>
+
+        {/* Custom Block Confirmation Modal */}
+        <Modal
+          open={blockModalVisible}
+          onCancel={() => setBlockModalVisible(false)}
+          onOk={() => {
+            if (blockUserData) {
+              console.log("Blocked user:", blockUserData);
+            }
+            setBlockModalVisible(false);
+          }}
+          okText="Block"
+          cancelText="Cancel"
+          okButtonProps={{ danger: true }}
+          centered
+          width={300}
+          closable={false}
+        >
+          {blockUserData && (
+            <div className="">
+              <p>Are you sure you want to block</p>
             </div>
           )}
         </Modal>

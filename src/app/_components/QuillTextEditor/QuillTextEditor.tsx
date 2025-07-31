@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
 // import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import "react-quill-new/dist/quill.snow.css";
 import { toast } from "sonner";
 import "./Quill.style.css";
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -51,7 +51,7 @@ const QuillTextEditor = ({
   };
 
   return (
-    <div className="p-2 rounded-lg">
+    <div className="p-2 rounded-lg !bg-transparent h-[85vh] !pt-10">
       <span className="flex items-center gap-3 text-[#333333]">
         <Link href="/settings">
           <HiOutlineArrowSmLeft
@@ -73,7 +73,7 @@ const QuillTextEditor = ({
         size="large"
         onClick={() => handleSave()}
         block
-        className="mt-[20px] bg-[#FF4F00] text-white border-none rounded-md h-[56px] hover:bg-[#ff5100ea]"
+        className="mt-[20px] !bg-brand-primary !text-white border-none rounded-md h-[56px] hover:!bg-green-900"
       >
         Update
       </Button>

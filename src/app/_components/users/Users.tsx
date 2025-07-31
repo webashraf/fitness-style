@@ -4,6 +4,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import type { TableColumnsType } from "antd";
 import { Avatar, Modal, Space, Table, Tooltip } from "antd";
 import React, { useState } from "react";
+import { GoBlocked } from "react-icons/go";
 
 interface DataType {
   key: React.Key;
@@ -11,6 +12,7 @@ interface DataType {
   name: string;
   email: string;
   phoneNumber: string;
+  tiers: string;
   address: string;
   createdAt: string;
   avatar: string;
@@ -27,6 +29,7 @@ const generateFakeUsers = (count: number): DataType[] => {
       name: `User ${i + 1}`,
       email: `user${i + 1}@example.com`,
       phoneNumber: `017000000${(i % 10) + 1}`,
+      tiers: i % 2 === 0 ? "Awaken" : "Balance",
       address: `House-${i + 1}, Street-${(i % 10) + 1}, City`,
       createdAt: new Date(
         Date.now() - Math.floor(Math.random() * 10000000000)
@@ -42,6 +45,8 @@ const generateFakeUsers = (count: number): DataType[] => {
 const User: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<DataType | null>(null);
+  const [blockModalVisible, setBlockModalVisible] = useState(false);
+  const [blockUserData, setBlockUserData] = useState<DataType | null>(null);
 
   const allUsers = generateFakeUsers(100);
 
@@ -55,6 +60,11 @@ const User: React.FC = () => {
     setSelectedUser(null);
   };
 
+  const handleBlockUser = (user: DataType) => {
+    setBlockUserData(user);
+    setBlockModalVisible(true);
+  };
+
   const columns: TableColumnsType<DataType> = [
     {
       title: "Serial",
@@ -66,7 +76,7 @@ const User: React.FC = () => {
     {
       title: "Full Name",
       dataIndex: "name",
-      width: "25%",
+      width: "20%",
       align: "start",
       render: (text, record) => (
         <Space className="justify-start flex w-full">
@@ -78,7 +88,19 @@ const User: React.FC = () => {
     {
       title: "Email",
       dataIndex: "email",
-      width: "25%",
+      width: "20%",
+      align: "start",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      width: "20%",
+      align: "start",
+    },
+    {
+      title: "Tiers",
+      dataIndex: "tiers",
+      width: "10%",
       align: "start",
     },
     {
@@ -94,12 +116,21 @@ const User: React.FC = () => {
       width: "10%",
       align: "center",
       render: (_, record) => (
-        <Tooltip title="View Details">
-          <EyeOutlined
-            onClick={() => handleViewUser(record)}
-            className="text-lg cursor-pointer"
-          />
-        </Tooltip>
+        <div className="flex items-center justify-center space-x-2">
+          <Tooltip title="View Details">
+            <EyeOutlined
+              onClick={() => handleViewUser(record)}
+              className="text-lg cursor-pointer"
+            />
+          </Tooltip>
+          <Tooltip title="Block User">
+            <GoBlocked
+              color="red"
+              className="text-lg cursor-pointer"
+              onClick={() => handleBlockUser(record)}
+            />
+          </Tooltip>
+        </div>
       ),
     },
   ];
@@ -148,6 +179,7 @@ const User: React.FC = () => {
               { label: "User Name", value: selectedUser.name },
               { label: "Email", value: selectedUser.email },
               { label: "Phone Number", value: selectedUser.phoneNumber },
+              { label: "Tiers", value: selectedUser.tiers },
               { label: "Address", value: selectedUser.address },
             ].map((item, idx) => (
               <div key={idx} className="flex justify-between border-b py-3">
@@ -155,6 +187,30 @@ const User: React.FC = () => {
                 <span>{item.value}</span>
               </div>
             ))}
+          </div>
+        )}
+      </Modal>
+
+      {/* Custom Block Confirmation Modal */}
+      <Modal
+        open={blockModalVisible}
+        onCancel={() => setBlockModalVisible(false)}
+        onOk={() => {
+          if (blockUserData) {
+            console.log("Blocked user:", blockUserData);
+          }
+          setBlockModalVisible(false);
+        }}
+        okText="Block"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+        centered
+        width={300}
+        closable={false}
+      >
+        {blockUserData && (
+          <div className="">
+            <p>Are you sure you want to block</p>
           </div>
         )}
       </Modal>

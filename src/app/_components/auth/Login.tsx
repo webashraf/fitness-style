@@ -26,7 +26,7 @@ const Login = () => {
         imageLink="/images/auth/basket_ball1.png"
         heading="Login to Account!"
         description="Please enter your email and password to continue"
-        btnLink="/forgot-pass"
+        btnLink="/"
       />
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -11,14 +11,28 @@ interface Props {
 }
 
 const DynamicModal: FC<Props> = ({ isOpen, onClose, title, children }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+
     window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+    window.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [onClose]);
 
   return (
@@ -31,6 +45,7 @@ const DynamicModal: FC<Props> = ({ isOpen, onClose, title, children }) => {
           exit={{ opacity: 0 }}
         >
           <motion.div
+            ref={modalRef}
             className="bg-white w-full max-w-2xl rounded-xl shadow-xl p-8 relative"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

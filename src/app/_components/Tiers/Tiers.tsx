@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FaLeaf } from "react-icons/fa";
 import DynamicModal from "../shared/DynamicModal";
 import AddTiersForm from "./AddTiersModal";
+import EditTiersForm from "./EditTiersModal";
 import { tiersContent } from "./tiers.const";
 import "./tiers.css";
 
@@ -22,8 +23,13 @@ export default function Tiers() {
     setIsOpen(true);
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+    setEditData(null);
+  };
+
   return (
-    <div className="min-h-screen bg-white px-4 py-10 md:px-10">
+    <div className="min-h-screen bg-white py-10 px-20">
       {/* Top Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {tiersContent.map((tier) => (
@@ -49,12 +55,13 @@ export default function Tiers() {
         </button>
       </div>
 
-      {/* Modal */}
-      <DynamicModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <AddTiersForm
-          defaultData={editData} // Pass existing data if editing
-          onClose={() => setIsOpen(false)}
-        />
+      {/* Unified Modal for Add/Edit */}
+      <DynamicModal isOpen={isOpen} onClose={handleClose}>
+        {editData ? (
+          <EditTiersForm defaultData={editData} onClose={handleClose} />
+        ) : (
+          <AddTiersForm defaultData={null} onClose={handleClose} />
+        )}
       </DynamicModal>
 
       {/* Detailed Cards */}

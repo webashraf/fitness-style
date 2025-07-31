@@ -49,7 +49,9 @@ body {
   background-color: #002b14 !important;
   color: white !important;
 }
-
+header.ant-layout-header.css-dev-only-do-not-override-7t2xvq {
+  padding-left: 0px !important;
+}
 .ant-menu-submenu-title {
   background: #002b141a !important;
   padding: 10px !important;
