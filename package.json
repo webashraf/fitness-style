@@ -37,6 +37,5 @@
     "react-quill": "^2.0.0",
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
-  },
-  "packageManager": "yarn@4.9.2"
+  }
 }

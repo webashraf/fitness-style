@@ -2,7 +2,12 @@ import Link from "next/link";
 import { BiLogOut } from "react-icons/bi";
 import { CiBadgeDollar } from "react-icons/ci";
 import { FaUserShield } from "react-icons/fa6";
-import { IoSettingsOutline, IoVideocamOutline } from "react-icons/io5";
+import {
+  IoSettingsOutline,
+  IoStatsChartOutline,
+  IoVideocamOutline,
+} from "react-icons/io5";
+import { LiaAwardSolid } from "react-icons/lia";
 import { MdOutlineSubscriptions } from "react-icons/md";
 import { RiBarChart2Line } from "react-icons/ri";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
@@ -39,6 +44,16 @@ export const sidebarMenuItems = [
         label: <Link href="/subscription/users">Users</Link>,
       },
     ],
+  },
+  {
+    key: "/badge-management",
+    icon: <LiaAwardSolid size={22} />,
+    label: <Link href="/badge-management">Badge Management</Link>,
+  },
+  {
+    key: "/progress-tracing",
+    icon: <IoStatsChartOutline size={22} />,
+    label: <Link href="/progress-tracing">Progress Tracking </Link>,
   },
   {
     key: "/video-content",
