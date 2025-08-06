@@ -154,6 +154,9 @@ const BadgeManagement: React.FC = () => {
         </Button>
       </div>
 
+
+
+
       {/* Search and Filter Row */}
       <div className="flex items-center justify-between my-4">
         <input
