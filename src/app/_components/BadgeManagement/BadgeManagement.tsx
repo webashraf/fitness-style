@@ -3,7 +3,7 @@
 import { EyeOutlined } from "@ant-design/icons";
 import type { TableColumnsType } from "antd";
 import { Avatar, Button, Modal, Space, Table, Tooltip } from "antd";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { GoBlocked } from "react-icons/go";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
@@ -46,8 +46,9 @@ const BadgeManagement: React.FC = () => {
   const [selectedBadge, setSelectedBadge] = useState<DataType | null>(null);
   const [blockModalVisible, setBlockModalVisible] = useState(false);
   const [blockBadgeData, setBlockBadgeData] = useState<DataType | null>(null);
+  const [addBadgeModalVisible, setAddBadgeModalVisible] = useState(false);
 
-  const allBadges = generateFakeBadges(100);
+  const allBadges = useMemo(() => generateFakeBadges(100), []);
 
   const handleViewBadge = (Badge: DataType) => {
     setSelectedBadge(Badge);
@@ -63,6 +64,16 @@ const BadgeManagement: React.FC = () => {
     setBlockBadgeData(Badge);
     setBlockModalVisible(true);
   };
+
+  const tiersFilters = [
+    { text: "Awaken", value: "Awaken" },
+    { text: "Balance", value: "Balance" },
+  ];
+
+  const statusFilters = [
+    { text: "Active", value: "Active" },
+    { text: "Inactive", value: "Inactive" },
+  ];
 
   const columns: TableColumnsType<DataType> = [
     {
@@ -89,12 +100,20 @@ const BadgeManagement: React.FC = () => {
       dataIndex: "tiers",
       width: "20%",
       align: "start",
+      filters: tiersFilters,
+      onFilter: (value, record) => record.tiers === value,
+      filterSearch: true,
+      filterMultiple: false,
     },
     {
       title: "Status",
       dataIndex: "status",
       width: "20%",
       align: "start",
+      filters: statusFilters,
+      onFilter: (value, record) => record.status === value,
+      filterSearch: true,
+      filterMultiple: false,
     },
 
     {
@@ -146,16 +165,85 @@ const BadgeManagement: React.FC = () => {
     <div className="py-5 pt-10">
       <div>
         <Button
-          className="w-full !py-7 !text-brand-primary !text-lg"
+          className="w-full !py-7 !text-brand-primary !border !border-brand-primary !text-lg"
           size="large"
           icon={<IoMdAddCircleOutline size={22} />}
+          onClick={() => setAddBadgeModalVisible(true)}
         >
           Add New Badge
         </Button>
       </div>
 
+      <Modal
+        open={addBadgeModalVisible}
+        onCancel={() => setAddBadgeModalVisible(false)}
+        footer={null}
+        centered
+        width={400}
+        className="rounded-xl"
+      >
+        <h2 className="text-center text-lg font-semibold mb-6">
+          ← Badges Management
+        </h2>
 
+        <form className="space-y-5">
+          {/* Upload Image */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">
+              Upload Image
+            </label>
+            <input
+              type="file"
+              className="block w-full border border-gray-300  px-4 py-2 rounded-lg text-sm text-gray-500
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-lg file:border-0
+        file:text-sm file:font-semibold
+        file:bg-pink-50 file:text-pink-700
+        hover:file:bg-pink-100"
+            />
+          </div>
 
+          {/* Badge Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">Badge Name</label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Enter Badge Name..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+              />
+            </div>
+          </div>
+
+          {/* Tier Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">Tier Name</label>
+            <select className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary">
+              <option value="Awaken">Awaken</option>
+              <option value="Balance">Balance</option>
+            </select>
+          </div>
+
+          {/* Status */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">Status</label>
+            <select className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+
+          {/* Save Button */}
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-brand-primary !text-white font-semibold py-3 rounded-lg hover:bg-green-800 transition"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Search and Filter Row */}
       <div className="flex items-center justify-between my-4">
@@ -227,7 +315,9 @@ const BadgeManagement: React.FC = () => {
       >
         {blockBadgeData && (
           <div>
-            <p>Are you sure you want to block</p>
+            <p>
+              Are you sure you want to block <b>{blockBadgeData.name}</b>?
+            </p>
           </div>
         )}
       </Modal>
